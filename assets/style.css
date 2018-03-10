@@ -1,0 +1,44 @@
+nav {
+    background-color: cadetblue;
+}
+nav .brand-logo {
+	margin-left: 200px;
+}
+ul:not(.browser-default) {
+    margin-right: 225px;
+    text-align: center;
+}
+.container {
+	margin: 0px auto;
+}
+.search, .latest-recalls, .results-display, .ten-recent-recalls{
+    text-align: center;
+}
+thead {
+	background-color: cadetblue;
+	color: white;
+}
+#search {
+	text-align: center;
+}
+th, td {
+	text-align: center;
+}
+.page-footer {
+	background-color: cadetblue;
+	text-align: center;
+}
+.Copyright {
+	text-align: center;
+}
+#search {
+	width: 75%;
+	text-align: center;
+	border: solid 1px cadetblue;
+}
+#start, #end {
+	width: 25%;
+	    height: 25px;
+	text-align: center;
+	border: solid 1px cadetblue;
+}
