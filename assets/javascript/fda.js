@@ -1,1 +1,7 @@
-console.log(this);
+$(document).ready(function(){
+	
+	$(".button-collapse").sideNav({
+		edge: "right"}
+	);
+	
+});
