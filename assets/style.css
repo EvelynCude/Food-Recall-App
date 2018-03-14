@@ -1,0 +1,44 @@
+body, html {
+	height: 100%;
+}
+nav {
+    background-color: cadetblue;
+}
+nav .brand-logo.center {
+    left: 30%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+nav .button-collapse {
+	float: right;
+	margin-right: 10%;
+}
+.left {
+	float: right !important;
+	margin-right: 15%;
+}
+.container {
+	margin: 0px auto;	
+}
+#search {
+	width: 75%;
+	text-align: center;
+	border: solid 1px cadetblue;
+	text-align: center;
+}
+.search, .latest-recalls, .results-display, .ten-recent-recalls{
+    text-align: center;
+}
+#start, #end {
+	width: 25%;
+	height: 25px;
+	text-align: center;
+	border: solid 1px cadetblue;
+}
+thead {
+	background-color: cadetblue;
+	color: white;
+}
+th, td {
+	text-align: center;
+}

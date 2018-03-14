@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Food Recall App</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+	<script src="assets/javascript/fda.js"></script>
+  <link rel="stylesheet" type="text/css" href="assets/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo center">Food Recall App</a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">dehaze</i></a>
+      <ul class="left hide-on-med-and-down">
+          <li><a href="#">About</a></li>
+          <li><a href="#">How to Use</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        <ul class="side-nav" id="mobile-demo">
+          <li><a href="#">About</a></li>
+          <li><a href="#">How to Use</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <div class="search">
+          <h5>Search Item</h5>
+          <br>
+          <form>
+            <input placeholder="Search Item" id="search" type="text" class="validate" >
+            <br>
+            <label for="start-date">Start Date</label>
+            <input type="date" id="start" name="start-date">
+            <label for="end-date">End Date</label>
+            <input type="date" id="end" name="end-date">
+            <br>
+            <button class="btn waves-effect waves-light" id="search-button" type="submit" name="search-btn">Search</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 l8">
+        <div class="results-display">
+          <h5>Results Section</h5>
+          <table class="striped">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody id="results-table">
+              <tr>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col s12 l4">
+        <div class="latest-recalls">
+          <h5>Latest Recalls</h5>
+          <table class="striped">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody id="latest-results-table">
+              <tr>
+                
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 l12">
+        <div class="ten-recent-recalls">
+          <h5>Latest Searched Recalls</h5>
+          <table class="striped">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+              <tbody id="ten-recent-results-table">
+                <tr>
+                </tr>
+              </tbody>
+          </table>  
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
