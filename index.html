@@ -35,7 +35,12 @@
           <br>
           <form>
             <input placeholder="Search Item" id="search" type="text" class="validate" >
-            <br>
+            <select>
+              <option value="" disabled selected>Search Type</option>
+              <option value="1">Barcode</option>
+              <option value="2">Product</option>
+              <option value="3">Company</option>
+            </select>
             <label for="start-date">Start Date</label>
             <input type="date" id="start" name="start-date">
             <label for="end-date">End Date</label>
