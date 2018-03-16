@@ -36,24 +36,17 @@ var enddate;
 var fdaStart;
 var fdaEnd;
 var fdaRange;
+var trueHit;
 
-//	FIRM URL
-// var firmURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:"+search+"+AND+recall_initiation_date:"+fdaRange+"&limit=10";
-//	PRODUCT URL
-// var productURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=product_description:"+search+"+AND+recall_initiation_date:"+fdaRange+"&limit=10";
-//	Query URL
 var queryURL;
-
 
 
 //-----------------ON DROPDOWN SELECTION FUNCTION--------------------//
 $('select[name="dropdown"]').change(function(){
   
     if ($(this).val() == "2"){
-        alert("2");
     	selection=2;
 	}else if($(this).val() == "3"){
-        alert("3");
     	selection=3;
     }
 //>>>Add an "if barcode selected" statement here to run barcode code<<<//
@@ -78,9 +71,7 @@ $("#search-button").on("click", function(event){
 	search= $("#search").val().trim();
 	startdate= $("#start").val().trim();
 	enddate= $("#end").val().trim();
-	console.log(search);
-	console.log(startdate);
-	console.log(enddate);
+
 	//	Convert user input start date into standard format
 	convertedStart = moment(startdate, "YYYY-MM-DD");
 	//	Convert user standard formatted start date into FDA format
@@ -97,13 +88,9 @@ $("#search-button").on("click", function(event){
 	
 	if(selection==2){
 		queryURL ="https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:"+search+"+AND+recall_initiation_date:"+fdaRange+"&limit=10";
-;
-		alert(queryURL);
 	}
 	if(selection==3){
 		queryURL ="https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:"+search+"+AND+recall_initiation_date:"+fdaRange+"&limit=10";
-;
-		alert(queryURL);
 	}
 	searchResults();
 });
@@ -126,27 +113,29 @@ function searchResults(){
     	// $("#mytable > tbody").append("<tr><td>"+data.product_description+"</td><td>"+data.recall_initiation_date+"</td><td>"+data.recalling_firm+"</td></tr>");
         $("#mytable > tbody").append("<tr><td>"+data.recall_initiation_date+"</td><td>"+data.product_description+"</td><td>"+data.recalling_firm+"</td><td>"+data.reason_for_recall+"</td></tr>");
     }
-	});  //ajax response function
-	fireb();
+  });  
+  //ajax error response function
+  $(document).ajaxSuccess(function(event, xhr){
+      trueHit = 1;
+      alert(trueHit);
+  fireb();
+  });
+
+  //ajax error response function
+  $(document).ajaxError(function(event, xhr){
+      if(xhr.status==404){
+      $("#mytable > tbody").append("<tr><td></td><td>No results for that search.  Try modifying your search.</td><td>"+xhr.statusText+"</td><td></td></tr>");
+      trueHit = 0;
+      alert(trueHit);
+    }
+  });
 }
-
-
-
-
-
 
 //-------------------------Firebase----------------------------------//
 
 
-    // Listen for the form submit
+// Listen for the form submit
  function fireb(){
- //  	hitRef.set({
- //    wins: 0,
- //    losses: 0,
-	// });
- 
-  	
-
   	if(selection==2){
   		searchType = "Product";
   	}else if(selection==3){
@@ -163,6 +152,7 @@ function searchResults(){
   }
 
   displayHits();
+// Display 10 most recent hits on DOM
   function displayHits(){
 
   hitRef.limitToLast(10).on('child_added', function (snapshot) {
