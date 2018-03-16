@@ -40,7 +40,7 @@ thead {
 	background-color: cadetblue;
 	color: white;
 }
-th, td {
+th {
 	text-align: center;
 }
 .select-wrapper {
