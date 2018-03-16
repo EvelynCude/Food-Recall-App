@@ -117,7 +117,6 @@ function searchResults(){
   //ajax error response function
   $(document).ajaxSuccess(function(event, xhr){
       trueHit = 1;
-      alert(trueHit);
   fireb();
   });
 
@@ -126,7 +125,6 @@ function searchResults(){
       if(xhr.status==404){
       $("#mytable > tbody").append("<tr><td></td><td>No results for that search.  Try modifying your search.</td><td>"+xhr.statusText+"</td><td></td></tr>");
       trueHit = 0;
-      alert(trueHit);
     }
   });
 }
