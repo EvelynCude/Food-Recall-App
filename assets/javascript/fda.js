@@ -1,11 +1,12 @@
-$(document).ready(function(){
-	
-	$(".button-collapse").sideNav({
-		edge: "right"}
-	);
-	$('select').material_select();
+$(document).ready(function () {
 
-//	Firebase Database Configuration
+  $(".button-collapse").sideNav({
+    edge: "right"
+  }
+  );
+  $('select').material_select();
+
+  //	Firebase Database Configuration
   var config = {
     apiKey: "AIzaSyCE-JQYJcXJesJdYUV6jSBpnBZBybD1HWI",
     authDomain: "food-recall-app.firebaseapp.com",
@@ -24,125 +25,152 @@ $(document).ready(function(){
   var recentHit;
 
 
-//	Search results variables
-var selection;
-var searchType;
-var search;
-var company;
-var product;
-var barcode;
-var startdate;
-var enddate;
-var fdaStart;
-var fdaEnd;
-var fdaRange;
-var trueHit;
+  //	Search results variables
+  var selection;
+  var searchType;
+  var search;
+  var company;
+  var product;
+  var barcode;
+  var startdate;
+  var enddate;
+  var fdaStart;
+  var fdaEnd;
+  var fdaRange;
+  var trueHit;
 
-var queryURL;
+  var queryURL;
+  var barcodeURL;
 
+  //-----------------ON DROPDOWN SELECTION FUNCTION--------------------//
+  $('select[name="dropdown"]').change(function () {
 
-//-----------------ON DROPDOWN SELECTION FUNCTION--------------------//
-$('select[name="dropdown"]').change(function(){
-  
-    if ($(this).val() == "2"){
-    	selection=2;
-	}else if($(this).val() == "3"){
-    	selection=3;
+    if ($(this).val() == "2") {
+      selection = 2;
+    } else if ($(this).val() == "3") {
+      selection = 3;
     }
-//>>>Add an "if barcode selected" statement here to run barcode code<<<//
-//
-//
-//
-//
-//
-//
-//
+    //This should create a variable from the upc that can be passed to the fda api search
 
-});
+
+
+
+  });
 
 
 
 
 
 
-//-------------------ON SEARCH CLICK FUNCTION------------------------//
-$("#search-button").on("click", function(event){
+  //-------------------ON SEARCH CLICK FUNCTION------------------------//
+  $("#search-button").on("click", function (event) {
     event.preventDefault();
-	search= $("#search").val().trim();
-	startdate= $("#start").val().trim();
-	enddate= $("#end").val().trim();
+    $("#mytable").empty();
+    search = $("#search").val().trim();
+    startdate = $("#start").val().trim();
+    enddate = $("#end").val().trim();
 
-	//	Convert user input start date into standard format
-	convertedStart = moment(startdate, "YYYY-MM-DD");
-	//	Convert user standard formatted start date into FDA format
-	fdaStart = (moment(convertedStart).format("YYYYMMDD"));
-	console.log(fdaStart);
-	//	Convert user input end date into standard format
-	convertedEnd = moment(enddate, "YYYY-MM-DD");
-	//	Convert user standard formatted start date into FDA format
-	fdaEnd = (moment(convertedEnd).format("YYYYMMDD"));
-	console.log(fdaEnd);
+    //	Convert user input start date into standard format
+    convertedStart = moment(startdate, "YYYY-MM-DD");
+    //	Convert user standard formatted start date into FDA format
+    fdaStart = (moment(convertedStart).format("YYYYMMDD"));
+    console.log(fdaStart);
+    //	Convert user input end date into standard format
+    convertedEnd = moment(enddate, "YYYY-MM-DD");
+    //	Convert user standard formatted start date into FDA format
+    fdaEnd = (moment(convertedEnd).format("YYYYMMDD"));
+    console.log(fdaEnd);
 
-	fdaRange="["+fdaStart+"+TO+"+fdaEnd+"]";
-	console.log(fdaRange);
-	
-	if(selection==2){
-		queryURL ="https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:"+search+"+AND+recall_initiation_date:"+fdaRange+"&limit=10";
-	}
-	if(selection==3){
-		queryURL ="https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:"+search+"+AND+recall_initiation_date:"+fdaRange+"&limit=10";
-	}
-	searchResults();
-});
+    fdaRange = "[" + fdaStart + "+TO+" + fdaEnd + "]";
+    console.log(fdaRange);
+
+    if (selection == 2) {
+      queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=product_name:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
+    }
+    else if (selection == 3) {
+      queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
+    }
+    else if (selection == 1) {
+      console.log(search);
+
+      var url = "https://www.barcodelookup.com/restapi";
+      url += '?' + $.param({
+        'key': "3berdz3s0ax9lfne6bu0b90wum6og8",
+        "barcode": search,
+        'short': 'y'
+      });
+
+      // Creating an AJAX call via CORSBridge to Barcodelookup
+      $.ajax({
+        url: 'https://corsbridge.herokuapp.com/' + encodeURIComponent(url),
+        method: 'GET'
+      }).then(function (response) {
+        var results = response;
+        console.log(results);
+        var barcodeURL = results.result[0].details.manufacturer;
+
+        console.log(barcodeURL);
+
+      });
+      console.log(barcodeURL);
+
+      queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + barcodeURL + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
+      console.log(queryURL);
+
+    }
+    searchResults();
+  });
 
 
-//----------------Query Search for response---------------------------//
-function searchResults(){
+
+
+  //----------------Query Search for response---------------------------//
+  function searchResults() {
     $.ajax({
       url: queryURL,
       method: 'GET'
-    }).then(function(response) {
- //   	console.log(response);
- 	var data = response.results[i];
+    }).then(function (response) {
+      //   	console.log(response);
+      var data = response.results[i];
 
-    for (var i = 0; i < response.results.length; i++) {
-    	var data = response.results[i];
-    	console.log(data.product_description);
-    	console.log(data.recall_initiation_date);
-    	console.log(data.recalling_firm);
-    	// $("#mytable > tbody").append("<tr><td>"+data.product_description+"</td><td>"+data.recall_initiation_date+"</td><td>"+data.recalling_firm+"</td></tr>");
-        $("#mytable > tbody").append("<tr><td>"+data.recall_initiation_date+"</td><td>"+data.product_description+"</td><td>"+data.recalling_firm+"</td><td>"+data.reason_for_recall+"</td></tr>");
-    }
-  });  
-  //ajax error response function
-  $(document).ajaxSuccess(function(event, xhr){
+      for (var i = 0; i < response.results.length; i++) {
+        var data = response.results[i];
+        console.log(data.product_description);
+        console.log(data.recall_initiation_date);
+        console.log(data.recalling_firm);
+        // $("#mytable > tbody").append("<tr><td>"+data.product_description+"</td><td>"+data.recall_initiation_date+"</td><td>"+data.recalling_firm+"</td></tr>");
+        $("#mytable > tbody").append("<tr><td>" + data.recall_initiation_date + "</td><td>" + data.product_description + "</td><td>" + data.recalling_firm + "</td><td>" + data.reason_for_recall + "</td></tr>");
+      }
+    });
+    //ajax error response function
+    $(document).ajaxSuccess(function (event, xhr) {
       trueHit = 1;
-  fireb();
-  });
+      fireb();
+    });
 
-  //ajax error response function
-  $(document).ajaxError(function(event, xhr){
-      if(xhr.status==404){
-      $("#mytable > tbody").append("<tr><td></td><td>No results for that search.  Try modifying your search.</td><td>"+xhr.statusText+"</td><td></td></tr>");
-      trueHit = 0;
+    //ajax error response function
+    $(document).ajaxError(function (event, xhr) {
+      if (xhr.status == 404) {
+        $("#mytable > tbody").append("<tr><td></td><td>No results for that search.  Try modifying your search.</td><td>" + xhr.statusText + "</td><td></td></tr>");
+        trueHit = 0;
+      }
+    });
+  }
+
+  //-------------------------Firebase----------------------------------//
+
+
+  // Listen for the form submit
+  function fireb() {
+    if (selection == 2) {
+      searchType = "Product";
+    } else if (selection == 3) {
+      searchType = "Firm";
     }
-  });
-}
-
-//-------------------------Firebase----------------------------------//
-
-
-// Listen for the form submit
- function fireb(){
-  	if(selection==2){
-  		searchType = "Product";
-  	}else if(selection==3){
-  		searchType = "Firm";
-  	}
-	//Save Data to an object
+    //Save Data to an object
     var recentHit = {
-    	type : searchType,
-      	search : search
+      type: searchType,
+      search: search
     }
     //Push object to Firebase
     hitRef.push(recentHit);
@@ -150,15 +178,16 @@ function searchResults(){
   }
 
   displayHits();
-// Display 10 most recent hits on DOM
-  function displayHits(){
+  // Display 10 most recent hits on DOM
+  function displayHits() {
 
-  hitRef.limitToLast(10).on('child_added', function (snapshot) {
-    // Get data from returned
-    console.log(snapshot.val());
-  //  addHit(snapshot.val());
-  });
-}
+    hitRef.limitToLast(10).on('child_added', function (snapshot) {
+      // Get data from returned
+      console.log(snapshot.val());
+      //  addHit(snapshot.val());
+    });
+
+  };
 });
 
 
@@ -203,7 +232,7 @@ function searchResults(){
 
 //	SEARCH BY SPECIFIC RECALL DATE WITH/WITHOUT A # OF RESULTS LIMIT
 	// var queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recall_initiation_date:20170511&limit=10";
-  
+
 //-----------TEST NEW QUERYURL HERE----------------------------//
 	// var queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:Tyson+AND+recall_initiation_date:20170511&limit=100";
  // var queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recall_initiation_date:[2018-01-01+TO+2018-03-10]+AND+recalling_firm:"+COMPANY+"&limit=100";    
