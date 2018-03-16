@@ -226,3 +226,4 @@ function searchResults(){
 // var queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=product_description:"+searchcompany+"+AND+recall_initiation_date:[20101+TO+20180312]&limit=10";
 //josh test
 // var queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recall_initiation_date:[20180101+TO+20180312]&limit=10";
+
