@@ -114,7 +114,11 @@ $(document).ready(function(){
     }
     searchResults();
   }else{
-    
+    $('#validation-error').slideDown(1000);
+
+    setTimeout(function(){
+      $('#validation-error').slideUp(1000);
+    }, 5000)
   }
   });
 
