@@ -56,16 +56,16 @@
           <br>
           <form id="myform">
             <input placeholder="Search Item" id="search" type="text" class="validate" required>
-            <select name="dropdown" id="dropdown">
+            <select name="dropdown" id="dropdown" required>
               <option value="" disabled selected>Search Type</option>
               <option value="1">Barcode</option>
               <option value="2">Product</option>
               <option value="3">Company</option>
             </select>
             <label for="start-date">Start Date</label>
-            <input type="date" id="start" name="start-date">
+            <input type="date" id="start" name="start-date" required>
             <label for="end-date">End Date</label>
-            <input type="date" id="end" name="end-date">
+            <input type="date" id="end" name="end-date" required>
             <br>
             <button class="btn waves-effect waves-light" id="search-button" type="submit" name="search-btn">Search</button>
           </form>
