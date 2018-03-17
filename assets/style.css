@@ -43,6 +43,9 @@ thead {
 th {
 	text-align: center;
 }
+td {
+	text-align: left;
+}
 .select-wrapper {
     position: relative;
     width: 35%;
