@@ -202,11 +202,15 @@ $(document).ready(function(){
   function displayHits() {
   $("#ten-recent-results-table").empty();
     hitRef.limitToLast(10).on('child_added', function (snapshot) {
-
       // Get data from returned
       console.log(snapshot.val().dateRange);
-      $("#ten-recent-results-table").append("<tr><td>"+snapshot.val().dateRange+"</td><td>"+snapshot.val().search+"</td><td>"+snapshot.val().type+"</td></tr>");
+      $("#ten-recent-results-table").prepend("<tr><td>"+snapshot.val().dateRange+"</td><td>"+snapshot.val().search+"</td><td>"+snapshot.val().type+"</td></tr>");
 
+      var trs = $('#ten-recent-results-table > tr');
+      // console.log(trs);
+      if(trs.length > 10){
+        trs[trs.length-1].remove();
+      }
     });
   };
 
