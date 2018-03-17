@@ -167,7 +167,7 @@ $(document).ready(function(){
 
   //-------------------------Firebase----------------------------------//
 
-  // Listen for search hit
+  Listen for search hit
   function fireb() {
     if (selection == 2) {
       searchType = "Product";
@@ -197,12 +197,16 @@ $(document).ready(function(){
     hitRef.limitToLast(10).on('child_added', function (snapshot) {
       // Get data from returned
       console.log(snapshot.val());
+
       //  addHit(snapshot.val());
     });
   };
 
 displayHits();
 });
+
+
+
 
 
 
