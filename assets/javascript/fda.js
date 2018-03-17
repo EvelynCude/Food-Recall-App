@@ -53,8 +53,7 @@ $(document).ready(function(){
     } else if ($(this).val() == "3") {
       selection = 3;
     }
-
-    else if($(this).val() == "1") {
+    else{
       selection = 1;
     }
   });
@@ -83,13 +82,14 @@ $(document).ready(function(){
  //  Choose query url depending on if the user selected barcode, product, or company
     if (selection == 2) {
       queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=product_name:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
-    searchResults();
+
     }
     else if (selection == 3) {
       queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
-    searchResults();
+
     }
     else if (selection == 1) {
+
 
       var url = "https://www.barcodelookup.com/restapi";
       url += '?' + $.param({
@@ -105,16 +105,18 @@ $(document).ready(function(){
       }).then(function (response) {
         var results = response;
         search = results.result[0].details.manufacturer;
-
-        buildQueryURL(search);
-        searchResults();
+       
+      buildQueryURL(search);
+      searchResults();
       });
     }
+    searchResults();
   });
 
   function buildQueryURL(search) {
     queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
     console.log(queryURL);
+    
   };
  
 
@@ -126,11 +128,11 @@ $(document).ready(function(){
       url: queryURL,
       method: 'GET'
     }).then(function(response) {
+    //  clear results of previous user search from results table
+    $("#results-table").empty();      
  	  var data = response.results[i];
     // For the length of the results, append data to html table
     for (var i = 0; i < response.results.length; i++) {
-      //  clear results of previous user search from results table
-      $("#results-table").empty();
     	var data = response.results[i];
       $("#mytable > tbody").append("<tr><td>"+data.recall_initiation_date+"</td><td>"+data.product_description+"</td><td>"+data.recalling_firm+"</td><td>"+data.reason_for_recall+"</td></tr>");
     }
@@ -151,10 +153,13 @@ $(document).ready(function(){
         trueHit = 0;
       }
     });
-      $("#search").empty();
-      $("#start").empty();
-      $("#end").empty();
-      $("#dropdown").empty();
+
+    // Reset user input form
+    $("#search").val("");
+    $("#start").val("");
+    $("#end").val("");
+    $("select").prop('selectedIndex', 0); //Sets the first option as selected (specific for materialize)
+    $("select").material_select();        //Update material select (specific for materialize)
   }
 
 
@@ -172,22 +177,20 @@ $(document).ready(function(){
     else if (selection == 1) {
       searchType = "Firm";
     }
+    console.log(searchType);
     //Save Data to an object
     var recentHit = {
-    	 type : searchType,
-      	search : search
+    	type : searchType,
+      search : search
     }
 
     //Push object to Firebase
     hitRef.push(recentHit);
-
+    //Run displayHits function
     displayHits();
-  // If any errors are experienced, log them to console.
-  },function(errorObject) {
-  console.log("The read failed: " + errorObject.code);
   }
 
-  displayHits();
+
   // Display 10 most recent hits on DOM
   function displayHits() {
 
@@ -197,6 +200,8 @@ $(document).ready(function(){
       //  addHit(snapshot.val());
     });
   };
+
+displayHits();
 });
 
 
