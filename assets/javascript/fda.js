@@ -128,6 +128,10 @@ $(document).ready(function(){
       url: queryURL,
       method: 'GET'
     }).then(function(response) {
+
+      trueHit = 1;
+      alert("success");
+      fireb();
     //  clear results of previous user search from results table
     $("#results-table").empty();      
  	  var data = response.results[i];
@@ -137,16 +141,7 @@ $(document).ready(function(){
       $("#mytable > tbody").append("<tr><td>"+data.recall_initiation_date+"</td><td>"+data.product_description+"</td><td>"+data.recalling_firm+"</td><td>"+data.reason_for_recall+"</td></tr>");
       
     }
-  });  
-  //ajax success response function
-  $(document).ajaxSuccess(function(event, xhr){
-      //  clear results of previous user search from results table
-      trueHit = 1;
-      alert("success");
-      fireb();
-    });
-    //ajax error response function
-    $(document).ajaxError(function (event, xhr) {
+  }).catch(function (event, xhr) {
       //  clear results of previous user search from results table
       $("#results-table").empty();
     //  if the ajax error code was a 404-No results show "no results" message on the table
@@ -154,7 +149,8 @@ $(document).ready(function(){
         $("#mytable > tbody").append("<tr><td></td><td>No results for that search.   Try modifying your search.</td><td></td><td></td></tr>");
         trueHit = 0;
       }
-    });
+    });  
+
 
     // Reset user input form
     $("#search").val("");
