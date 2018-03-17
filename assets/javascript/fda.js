@@ -50,8 +50,10 @@ $(document).ready(function () {
     } else if ($(this).val() == "3") {
       selection = 3;
     }
-    //This should create a variable from the upc that can be passed to the fda api search
 
+    else {
+      selection = 1;
+    }
 
 
 
@@ -65,7 +67,7 @@ $(document).ready(function () {
   //-------------------ON SEARCH CLICK FUNCTION------------------------//
   $("#search-button").on("click", function (event) {
     event.preventDefault();
-    $("#mytable").empty();
+    $("#results-table").empty();
     search = $("#search").val().trim();
     startdate = $("#start").val().trim();
     enddate = $("#end").val().trim();
@@ -91,7 +93,7 @@ $(document).ready(function () {
       queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
     }
     else if (selection == 1) {
-      console.log(search);
+
 
       var url = "https://www.barcodelookup.com/restapi";
       url += '?' + $.param({
@@ -107,21 +109,23 @@ $(document).ready(function () {
       }).then(function (response) {
         var results = response;
         console.log(results);
-        var barcodeURL = results.result[0].details.manufacturer;
+        search = results.result[0].details.manufacturer;
 
-        console.log(barcodeURL);
 
+        buildQueryURL(search);
+        searchResults();
       });
-      console.log(barcodeURL);
-
-      queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + barcodeURL + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
-      console.log(queryURL);
 
     }
     searchResults();
   });
 
+  function buildQueryURL(search) {
+    queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
+    console.log(queryURL);
 
+
+  };
 
 
   //----------------Query Search for response---------------------------//
@@ -167,11 +171,17 @@ $(document).ready(function () {
     } else if (selection == 3) {
       searchType = "Firm";
     }
+    else if (selection == 1) {
+      searchType = "Firm";
+    }
     //Save Data to an object
     var recentHit = {
       type: searchType,
       search: search
     }
+    console.log(recentHit);
+
+
     //Push object to Firebase
     hitRef.push(recentHit);
 
