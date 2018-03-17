@@ -18,7 +18,7 @@ nav .button-collapse {
 	margin-right: 15%;
 }
 .container {
-	margin: 0px auto;	
+	margin: 0px auto;
 }
 #search {
 	width: 75%;
@@ -61,4 +61,24 @@ th {
     font-size: .8rem;
     position: relative;
     top: 0;
+}
+.ten-recent-recalls {
+	margin-bottom: 25px;
+}
+.footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background-color: cadetblue;
+	color: white;
+	text-align: center;
+}
+.error{
+	color: red;
+	display: none;
+	margin-bottom: 5px;
+}
+p {
+	text-align: center;
+	display: inline;
 }
