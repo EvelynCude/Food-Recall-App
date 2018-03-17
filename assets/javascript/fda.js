@@ -144,12 +144,14 @@ $(document).ready(function(){
     for (var i = 0; i < response.results.length; i++) {
     	var data = response.results[i];
       $("#mytable > tbody").append("<tr><td>"+data.recall_initiation_date+"</td><td>"+data.product_description+"</td><td>"+data.recalling_firm+"</td><td>"+data.reason_for_recall+"</td></tr>");
+      
     }
   });  
   //ajax success response function
   $(document).ajaxSuccess(function(event, xhr){
       //  clear results of previous user search from results table
       trueHit = 1;
+      alert("success");
       fireb();
     });
     //ajax error response function
@@ -176,7 +178,7 @@ $(document).ready(function(){
 
   //-------------------------Firebase----------------------------------//
 
-  // Listen for search hit
+  //Listen for search hit
   function fireb() {
     if (selection == 2) {
       searchType = "Product";
@@ -189,7 +191,8 @@ $(document).ready(function(){
     console.log(searchType);
     //Save Data to an object
     var recentHit = {
-    	type : searchType,
+      dateRange : fdaRange,
+      type : searchType,
       search : search
     }
 
@@ -202,16 +205,21 @@ $(document).ready(function(){
 
   // Display 10 most recent hits on DOM
   function displayHits() {
-
+  $("#ten-recent-results-table").empty();
     hitRef.limitToLast(10).on('child_added', function (snapshot) {
+
       // Get data from returned
-      console.log(snapshot.val());
-      //  addHit(snapshot.val());
+      console.log(snapshot.val().dateRange);
+      $("#ten-recent-results-table").append("<tr><td>"+snapshot.val().dateRange+"</td><td>"+snapshot.val().search+"</td><td>"+snapshot.val().type+"</td></tr>");
+
     });
   };
 
 displayHits();
 });
+
+
+
 
 
 
