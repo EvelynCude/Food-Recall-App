@@ -1,33 +1,51 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Food Recall App</title>
   <!-- Link to Moment.js -->
   <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-	<script src="assets/javascript/fda.js"></script>
+  <script src="assets/javascript/fda.js"></script>
   <link rel="stylesheet" type="text/css" href="assets/style.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
- 
+
 </head>
+
 <body>
-	<nav>
+  <nav>
     <div class="nav-wrapper">
       <a href="#" class="brand-logo center">Food Recall App</a>
-      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">dehaze</i></a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse">
+        <i class="material-icons">dehaze</i>
+      </a>
       <ul class="left hide-on-med-and-down">
-          <li><a href="#">About</a></li>
-          <li><a href="#">How to Use</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-        <ul class="side-nav" id="mobile-demo">
-          <li><a href="#">About</a></li>
-          <li><a href="#">How to Use</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
+        <li>
+          <a href="#">About</a>
+        </li>
+        <li>
+          <a href="#">How to Use</a>
+        </li>
+        <li>
+          <a href="#">Contact</a>
+        </li>
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+        <li>
+          <a href="#">About</a>
+        </li>
+        <li>
+          <a href="#">How to Use</a>
+        </li>
+        <li>
+          <a href="#">Contact</a>
+        </li>
+      </ul>
     </div>
   </nav>
   <div class="container">
@@ -88,7 +106,7 @@
             </thead>
             <tbody id="latest-results-table">
               <tr>
-                
+
               </tr>
             </tbody>
           </table>
@@ -108,16 +126,17 @@
                 <th>Reason</th>
               </tr>
             </thead>
-              <tbody id="ten-recent-results-table">
-                <tr>
-                </tr>
-              </tbody>
-          </table>  
+            <tbody id="ten-recent-results-table">
+              <tr>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
-<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
 </body>
+
 </html>
