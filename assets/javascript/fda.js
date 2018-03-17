@@ -128,7 +128,6 @@ $(document).ready(function(){
       url: queryURL,
       method: 'GET'
     }).then(function(response) {
-
       trueHit = 1;
       alert("success");
       fireb();
