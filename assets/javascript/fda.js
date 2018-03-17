@@ -69,6 +69,8 @@ $(document).ready(function(){
     search = $("#search").val().trim();
     startdate = $("#start").val().trim();
     enddate = $("#end").val().trim();
+    
+    if(search != '' && startdate != '' && enddate != '' && selection != null){
     //	Convert user input start date into standard format
     convertedStart = moment(startdate, "YYYY-MM-DD");
     //	Convert user standard formatted start date into FDA format
@@ -111,6 +113,9 @@ $(document).ready(function(){
       });
     }
     searchResults();
+  }else{
+    
+  }
   });
 
   function buildQueryURL(search) {
