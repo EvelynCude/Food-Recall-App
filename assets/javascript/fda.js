@@ -4,6 +4,10 @@ $(document).ready(function(){
 		edge: "right"}
 	);
 	$('select').material_select();
+  $("#myform").validate();
+  
+
+
 
 //	Firebase Database Configuration
   var config = {
@@ -67,7 +71,7 @@ $('select[name="dropdown"]').change(function(){
 
 //-------------------ON SEARCH CLICK FUNCTION------------------------//
 $("#search-button").on("click", function(event){
-    event.preventDefault();
+  event.preventDefault();
 	search= $("#search").val().trim();
 	startdate= $("#start").val().trim();
 	enddate= $("#end").val().trim();
@@ -87,9 +91,9 @@ $("#search-button").on("click", function(event){
 	console.log(fdaRange);
 	
 	if(selection==2){
-		queryURL ="https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:"+search+"+AND+recall_initiation_date:"+fdaRange+"&limit=10";
+		queryURL ="https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=product_description:"+search+"+AND+recall_initiation_date:"+fdaRange+"&limit=10";
 	}
-	if(selection==3){
+	else if(selection==3){
 		queryURL ="https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:"+search+"+AND+recall_initiation_date:"+fdaRange+"&limit=10";
 	}
 	searchResults();
@@ -107,14 +111,10 @@ function searchResults(){
 
     for (var i = 0; i < response.results.length; i++) {
     	var data = response.results[i];
-    	console.log(data.product_description);
-    	console.log(data.recall_initiation_date);
-    	console.log(data.recalling_firm);
-    	// $("#mytable > tbody").append("<tr><td>"+data.product_description+"</td><td>"+data.recall_initiation_date+"</td><td>"+data.recalling_firm+"</td></tr>");
-        $("#mytable > tbody").append("<tr><td>"+data.recall_initiation_date+"</td><td>"+data.product_description+"</td><td>"+data.recalling_firm+"</td><td>"+data.reason_for_recall+"</td></tr>");
+      $("#mytable > tbody").append("<tr><td>"+data.recall_initiation_date+"</td><td>"+data.product_description+"</td><td>"+data.recalling_firm+"</td><td>"+data.reason_for_recall+"</td></tr>");
     }
   });  
-  //ajax error response function
+  //ajax success response function
   $(document).ajaxSuccess(function(event, xhr){
       trueHit = 1;
   fireb();
@@ -141,7 +141,7 @@ function searchResults(){
   	}
 	//Save Data to an object
     var recentHit = {
-    	type : searchType,
+    	 type : searchType,
       	search : search
     }
     //Push object to Firebase
