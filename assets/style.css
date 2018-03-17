@@ -73,3 +73,12 @@ th {
 	color: white;
 	text-align: center;
 }
+.error{
+	color: red;
+	display: none;
+	margin-bottom: 5px;
+}
+p {
+	text-align: center;
+	display: inline;
+}
