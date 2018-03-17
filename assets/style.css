@@ -1,0 +1,84 @@
+body, html {
+	height: 100%;
+}
+nav {
+    background-color: cadetblue;
+}
+nav .brand-logo.center {
+    left: 30%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+nav .button-collapse {
+	float: right;
+	margin-right: 10%;
+}
+.left {
+	float: right !important;
+	margin-right: 15%;
+}
+.container {
+	margin: 0px auto;
+}
+#search {
+	width: 75%;
+	text-align: center;
+	border: solid 1px cadetblue;
+	text-align: center;
+	margin-bottom: 0px;
+}
+.search, .latest-recalls, .results-display, .ten-recent-recalls{
+    text-align: center;
+}
+#start, #end {
+	width: 33%;
+	height: 25px;
+	text-align: center;
+	border: solid 1px cadetblue;
+}
+thead {
+	background-color: cadetblue;
+	color: white;
+}
+th {
+	text-align: center;
+}
+.select-wrapper {
+    position: relative;
+    width: 35%;
+    margin-left: 31%;
+}
+.select-wrapper input.select-dropdown {
+    position: relative;
+    text-align: center;
+}
+.select-wrapper input.select-dropdown {
+    border: 1px solid cadetblue;
+    height: 2rem;
+    margin: 5px;
+}
+.select-wrapper+label {
+    font-size: .8rem;
+    position: relative;
+    top: 0;
+}
+.ten-recent-recalls {
+	margin-bottom: 25px;
+}
+.footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background-color: cadetblue;
+	color: white;
+	text-align: center;
+}
+.error{
+	color: red;
+	display: none;
+	margin-bottom: 5px;
+}
+p {
+	text-align: center;
+	display: inline;
+}
