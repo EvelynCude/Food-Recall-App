@@ -1,12 +1,8 @@
 $(document).ready(function(){
-	
 	$(".button-collapse").sideNav({
 		edge: "right"}
 	);
 	$('select').material_select();
-
-  
-
 
 
 //	Firebase Database Configuration
@@ -19,7 +15,6 @@ $(document).ready(function(){
     messagingSenderId: "847951863516"
   };
   firebase.initializeApp(config);
-
   //Firebase Database Variable
   var database = firebase.database();
   //Most recent search hit ref
@@ -28,7 +23,9 @@ $(document).ready(function(){
   var recentHit;
 
 
-  //	Search results variables
+
+
+  //---------------------Search global variables--------------------//
   var selection;
   var searchType;
   var search;
@@ -41,11 +38,14 @@ $(document).ready(function(){
   var fdaEnd;
   var fdaRange;
   var trueHit;
-
   var queryURL;
   var barcodeURL;
 
-  //-----------------ON DROPDOWN SELECTION FUNCTION--------------------//
+
+
+
+
+  //-----------------DROPDOWN SELECTION FUNCTION--------------------//
   $('select[name="dropdown"]').change(function () {
 
     if ($(this).val() == "2") {
@@ -54,41 +54,42 @@ $(document).ready(function(){
       selection = 3;
     }
 
-    else {
+    else if($(this).val() == "1") {
       selection = 1;
     }
   });
 
+
+
+
+
   //-------------------ON SEARCH CLICK FUNCTION------------------------//
   $("#search-button").on("click", function (event) {
     event.preventDefault();
-    $("#results-table").empty();
+//  store user inputs in global variables
     search = $("#search").val().trim();
     startdate = $("#start").val().trim();
     enddate = $("#end").val().trim();
-
     //	Convert user input start date into standard format
     convertedStart = moment(startdate, "YYYY-MM-DD");
     //	Convert user standard formatted start date into FDA format
     fdaStart = (moment(convertedStart).format("YYYYMMDD"));
-    console.log(fdaStart);
     //	Convert user input end date into standard format
     convertedEnd = moment(enddate, "YYYY-MM-DD");
-    //	Convert user standard formatted start date into FDA format
+  //  Convert user standard formatted start date into FDA format and store in fda global variable
     fdaEnd = (moment(convertedEnd).format("YYYYMMDD"));
-    console.log(fdaEnd);
-
     fdaRange = "[" + fdaStart + "+TO+" + fdaEnd + "]";
-    console.log(fdaRange);
 
+ //  Choose query url depending on if the user selected barcode, product, or company
     if (selection == 2) {
       queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=product_name:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
+    searchResults();
     }
     else if (selection == 3) {
       queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
+    searchResults();
     }
     else if (selection == 1) {
-
 
       var url = "https://www.barcodelookup.com/restapi";
       url += '?' + $.param({
@@ -103,62 +104,69 @@ $(document).ready(function(){
         method: 'GET'
       }).then(function (response) {
         var results = response;
-        console.log(results);
         search = results.result[0].details.manufacturer;
-
 
         buildQueryURL(search);
         searchResults();
       });
-
     }
-    searchResults();
   });
 
   function buildQueryURL(search) {
     queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
     console.log(queryURL);
-
-
   };
-  
+ 
+
+
+
   //----------------Query Search for response---------------------------//
   function searchResults() {
     $.ajax({
       url: queryURL,
       method: 'GET'
     }).then(function(response) {
- //   	console.log(response);
- 	var data = response.results[i];
-
+ 	  var data = response.results[i];
+    // For the length of the results, append data to html table
     for (var i = 0; i < response.results.length; i++) {
+      //  clear results of previous user search from results table
+      $("#results-table").empty();
     	var data = response.results[i];
       $("#mytable > tbody").append("<tr><td>"+data.recall_initiation_date+"</td><td>"+data.product_description+"</td><td>"+data.recalling_firm+"</td><td>"+data.reason_for_recall+"</td></tr>");
     }
   });  
   //ajax success response function
   $(document).ajaxSuccess(function(event, xhr){
+      //  clear results of previous user search from results table
       trueHit = 1;
       fireb();
     });
-
     //ajax error response function
     $(document).ajaxError(function (event, xhr) {
+      //  clear results of previous user search from results table
+      $("#results-table").empty();
+    //  if the ajax error code was a 404-No results show "no results" message on the table
       if (xhr.status == 404) {
-        $("#mytable > tbody").append("<tr><td></td><td>No results for that search.  Try modifying your search.</td><td>" + xhr.statusText + "</td><td></td></tr>");
+        $("#mytable > tbody").append("<tr><td></td><td>No results for that search.   Try modifying your search.</td><td></td><td></td></tr>");
         trueHit = 0;
       }
     });
+      $("#search").empty();
+      $("#start").empty();
+      $("#end").empty();
+      $("#dropdown").empty();
   }
+
+
+
 
   //-------------------------Firebase----------------------------------//
 
-
-  // Listen for the form submit
+  // Listen for search hit
   function fireb() {
     if (selection == 2) {
       searchType = "Product";
-    } else if (selection == 3) {
+    }else if (selection == 3) {
       searchType = "Firm";
     }
     else if (selection == 1) {
@@ -169,12 +177,14 @@ $(document).ready(function(){
     	 type : searchType,
       	search : search
     }
-    console.log(recentHit);
-
 
     //Push object to Firebase
     hitRef.push(recentHit);
 
+    displayHits();
+  // If any errors are experienced, log them to console.
+  },function(errorObject) {
+  console.log("The read failed: " + errorObject.code);
   }
 
   displayHits();
@@ -186,7 +196,6 @@ $(document).ready(function(){
       console.log(snapshot.val());
       //  addHit(snapshot.val());
     });
-
   };
 });
 
