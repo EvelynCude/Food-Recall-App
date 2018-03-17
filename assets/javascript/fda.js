@@ -1,12 +1,15 @@
-$(document).ready(function () {
+$(document).ready(function(){
+	
+	$(".button-collapse").sideNav({
+		edge: "right"}
+	);
+	$('select').material_select();
 
-  $(".button-collapse").sideNav({
-    edge: "right"
-  }
-  );
-  $('select').material_select();
+  
 
-  //	Firebase Database Configuration
+
+
+//	Firebase Database Configuration
   var config = {
     apiKey: "AIzaSyCE-JQYJcXJesJdYUV6jSBpnBZBybD1HWI",
     authDomain: "food-recall-app.firebaseapp.com",
@@ -54,15 +57,7 @@ $(document).ready(function () {
     else {
       selection = 1;
     }
-
-
-
   });
-
-
-
-
-
 
   //-------------------ON SEARCH CLICK FUNCTION------------------------//
   $("#search-button").on("click", function (event) {
@@ -126,28 +121,23 @@ $(document).ready(function () {
 
 
   };
-
-
+  
   //----------------Query Search for response---------------------------//
   function searchResults() {
     $.ajax({
       url: queryURL,
       method: 'GET'
-    }).then(function (response) {
-      //   	console.log(response);
-      var data = response.results[i];
+    }).then(function(response) {
+ //   	console.log(response);
+ 	var data = response.results[i];
 
-      for (var i = 0; i < response.results.length; i++) {
-        var data = response.results[i];
-        console.log(data.product_description);
-        console.log(data.recall_initiation_date);
-        console.log(data.recalling_firm);
-        // $("#mytable > tbody").append("<tr><td>"+data.product_description+"</td><td>"+data.recall_initiation_date+"</td><td>"+data.recalling_firm+"</td></tr>");
-        $("#mytable > tbody").append("<tr><td>" + data.recall_initiation_date + "</td><td>" + data.product_description + "</td><td>" + data.recalling_firm + "</td><td>" + data.reason_for_recall + "</td></tr>");
-      }
-    });
-    //ajax error response function
-    $(document).ajaxSuccess(function (event, xhr) {
+    for (var i = 0; i < response.results.length; i++) {
+    	var data = response.results[i];
+      $("#mytable > tbody").append("<tr><td>"+data.recall_initiation_date+"</td><td>"+data.product_description+"</td><td>"+data.recalling_firm+"</td><td>"+data.reason_for_recall+"</td></tr>");
+    }
+  });  
+  //ajax success response function
+  $(document).ajaxSuccess(function(event, xhr){
       trueHit = 1;
       fireb();
     });
@@ -176,8 +166,8 @@ $(document).ready(function () {
     }
     //Save Data to an object
     var recentHit = {
-      type: searchType,
-      search: search
+    	 type : searchType,
+      	search : search
     }
     console.log(recentHit);
 
