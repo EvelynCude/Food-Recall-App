@@ -22,7 +22,7 @@ $(document).ready(function(){
   //Recent hit variable to push hit object to firebase
   var recentHit;
 
-
+  displayHits();
 
 
   //---------------------Search global variables--------------------//
@@ -40,7 +40,6 @@ $(document).ready(function(){
   var trueHit;
   var queryURL;
   var barcodeURL;
-
 
 
 
@@ -83,19 +82,20 @@ $(document).ready(function(){
 
  //  Choose query url depending on if the user selected barcode, product, or company
     if (selection == 2) {
-      queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=product_name:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
-
+      queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=product_name:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=20";
+      searchResults();
     }
     else if (selection == 3) {
-      queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
-
+      queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=20";
+      searchResults();
     }
     else if (selection == 1) {
 
 
       var url = "https://www.barcodelookup.com/restapi";
       url += '?' + $.param({
-        'key': "3berdz3s0ax9lfne6bu0b90wum6og8",
+        'key': "9wvjhlbpw4y7n2myjy56ops3d5qja3",
+//       'key': "3berdz3s0ax9lfne6bu0b90wum6og8",
         "barcode": search,
         'short': 'y'
       });
@@ -103,16 +103,15 @@ $(document).ready(function(){
       // Creating an AJAX call via CORSBridge to Barcodelookup
       $.ajax({
         url: 'https://corsbridge.herokuapp.com/' + encodeURIComponent(url),
-        method: 'GET'
+        method: 'GET',
       }).then(function (response) {
         var results = response;
         search = results.result[0].details.manufacturer;
-       
       buildQueryURL(search);
-      searchResults();
+      
       });
     }
-    searchResults();
+    
   }else{
     $('#validation-error').slideDown(1000);
 
@@ -124,42 +123,38 @@ $(document).ready(function(){
 
   function buildQueryURL(search) {
     queryURL = "https://api.fda.gov/food/enforcement.json?api_key=YPcbJ01rsUqDmd2a2v38fbeJgKRVmrvd4WOWKu1F&search=recalling_firm:" + search + "+AND+recall_initiation_date:" + fdaRange + "&limit=10";
-    console.log(queryURL);
-    
+    searchResults();
   };
  
 
 
 
   //----------------Query Search for response---------------------------//
-  function searchResults() {
+function searchResults() {
     $.ajax({
       url: queryURL,
       method: 'GET'
     }).then(function(response) {
       trueHit = 1;
-      alert("success");
       fireb();
+     
     //  clear results of previous user search from results table
-    $("#results-table").empty();      
+    $("#results-table").empty(); 
  	  var data = response.results[i];
     // For the length of the results, append data to html table
     for (var i = 0; i < response.results.length; i++) {
     	var data = response.results[i];
       $("#mytable > tbody").append("<tr><td>"+data.recall_initiation_date+"</td><td>"+data.product_description+"</td><td>"+data.recalling_firm+"</td><td>"+data.reason_for_recall+"</td></tr>");
-      
-    }
+     } 
   }).catch(function (event, xhr) {
       //  clear results of previous user search from results table
       $("#results-table").empty();
-    //  if the ajax error code was a 404-No results show "no results" message on the table
-      if (xhr.status == 404) {
+      //  if the ajax error code was a 404-No results show "no results" message on the table
+      if (xhr.status == 404 || xhr.status == undefined){
         $("#mytable > tbody").append("<tr><td></td><td>No results for that search.   Try modifying your search.</td><td></td><td></td></tr>");
         trueHit = 0;
       }
-    });  
-
-
+    }); 
     // Reset user input form
     $("#search").val("");
     $("#start").val("");
@@ -171,50 +166,45 @@ $(document).ready(function(){
 
 
 
-  //-------------------------Firebase----------------------------------//
+//-------------------------Firebase----------------------------------//
 
-  //Listen for search hit
-  function fireb() {
-    if (selection == 2) {
-      searchType = "Product";
-    }else if (selection == 3) {
-      searchType = "Firm";
-    }
-    else if (selection == 1) {
-      searchType = "Firm";
-    }
-    console.log(searchType);
-    //Save Data to an object
-    var recentHit = {
-      dateRange : fdaRange,
-      type : searchType,
-      search : search
-    }
-
-    //Push object to Firebase
-    hitRef.push(recentHit);
-    //Run displayHits function
-    displayHits();
+//Listen for search hit
+function fireb() {
+  if (selection == 2) {
+    searchType = "Product";
+  }else if (selection == 3) {
+    searchType = "Firm";
   }
+  else if (selection == 1) {
+    searchType = "Firm";
+  }
+  //Save Data to an object
+  var recentHit = {
+    dateRange : fdaRange,
+    type : searchType,
+    search : search
+  }
+  //Push object to Firebase
+  hitRef.push(recentHit);
+  //Run displayHits function
+  displayHits();
+}
 
+// Display 10 most recent hits on DOM
+function displayHits() {
+$("#ten-recent-results-table").empty();
+  hitRef.limitToLast(10).on('child_added', function (snapshot) {
+    // Get data from returned
+    console.log(snapshot.val().dateRange);
+    $("#ten-recent-results-table").prepend("<tr><td>"+snapshot.val().dateRange+"</td><td>"+snapshot.val().search+"</td><td>"+snapshot.val().type+"</td></tr>");
 
-  // Display 10 most recent hits on DOM
-  function displayHits() {
-  $("#ten-recent-results-table").empty();
-    hitRef.limitToLast(10).on('child_added', function (snapshot) {
-      // Get data from returned
-      console.log(snapshot.val().dateRange);
-      $("#ten-recent-results-table").prepend("<tr><td>"+snapshot.val().dateRange+"</td><td>"+snapshot.val().search+"</td><td>"+snapshot.val().type+"</td></tr>");
-
-      var trs = $('#ten-recent-results-table > tr');
-      // console.log(trs);
-      if(trs.length > 10){
-        trs[trs.length-1].remove();
-      }
-    });
-  };
-
-displayHits();
+    var trs = $('#ten-recent-results-table > tr');
+    // console.log(trs);
+    if(trs.length > 10){
+      trs[trs.length-1].remove();
+    }
+  });
+};
 });
 
 
