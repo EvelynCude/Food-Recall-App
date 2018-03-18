@@ -5,7 +5,7 @@ nav {
     background-color: cadetblue;
 }
 nav .brand-logo.center {
-    left: 30%;
+    left: 32%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
 }
