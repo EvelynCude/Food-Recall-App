@@ -170,17 +170,29 @@ function searchResults() {
 
 //Listen for search hit
 function fireb() {
+    //  Convert user input start date into standard format
+    starttandard = moment(startdate, "YYYY-MM-DD");
+    //  Convert user standard formatted start date into user view format
+    fbStart = (moment(convertedStart).format("MM/DD/YYYY"));
+    //  Convert user input end date into standard format
+    endStandard = moment(enddate, "YYYY-MM-DD");
+    //  Convert user standard formatted start date into user view format
+    fbEnd = (moment(convertedEnd).format("MM/DD/YYYY"));
+    //  Combine start and end date to display as a range and store a variable
+    fbRange = fbStart + " - " + fbEnd;
+
+  //  Determine what search type the user selected in order to store in firebase
   if (selection == 2) {
     searchType = "Product";
   }else if (selection == 3) {
-    searchType = "Firm";
+    searchType = "Company";
   }
   else if (selection == 1) {
-    searchType = "Firm";
+    searchType = "Company";
   }
-  //Save Data to an object
+  //Save search data to an object
   var recentHit = {
-    dateRange : fdaRange,
+    dateRange : fbRange,
     type : searchType,
     search : search
   }
@@ -195,11 +207,9 @@ function displayHits() {
 $("#ten-recent-results-table").empty();
   hitRef.limitToLast(10).on('child_added', function (snapshot) {
     // Get data from returned
-    console.log(snapshot.val().dateRange);
     $("#ten-recent-results-table").prepend("<tr><td>"+snapshot.val().dateRange+"</td><td>"+snapshot.val().search+"</td><td>"+snapshot.val().type+"</td></tr>");
-
+    //  Remove any additional hits (>10) added by other users using the app
     var trs = $('#ten-recent-results-table > tr');
-    // console.log(trs);
     if(trs.length > 10){
       trs[trs.length-1].remove();
     }
