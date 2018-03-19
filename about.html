@@ -1,5 +1,6 @@
 <!DOCTYPE <!DOCTYPE html>
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8" />
@@ -13,44 +14,92 @@
     <link rel="stylesheet" type="text/css" href="assets/style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+
 <body>
-        <nav>
-            <div class="nav-wrapper">
-                <a href="#" class="brand-logo center">Should I Eat This?</a>
-                <a href="#" data-activates="mobile-demo" class="button-collapse">
-                    <i class="material-icons">dehaze</i>
-                </a>
-                <ul class="left hide-on-med-and-down">
-                    <li>
-                        <a href="index.html">Home</a>
-                    </li>
-                    <li>
-                        <a href="how.html">How to Use</a>
-                    </li>
-                   
-                </ul>
-                <ul class="side-nav" id="mobile-demo">
-                    <li>
-                        <a href="index.html">Home</a>
-                    </li>
-                    <li>
-                        <a href="how.html">How to Use</a>
-                    </li>
-    
-                </ul>
-            </div>
-        </nav>
-        <div class="container">
-            <div class="row">
-                <div class="col s12">
-                    <h5>About </h5>
-                </div>
-                <p>
-                    
-                </p>
-            </div>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">Should I Eat This?</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse">
+                <i class="material-icons">dehaze</i>
+            </a>
+            <ul class="left hide-on-med-and-down">
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="how.html">How to Use</a>
+                </li>
+
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="how.html">How to Use</a>
+                </li>
+
+            </ul>
         </div>
-        <div class="footer"><h6>&copy 2018 Copyright Should I Eat This App</h6></div>
-        <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
-    </body>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <center>
+                    <h4> Our Mission </h4>
+                </center>
+
+                <center>
+                    <p>To provide users with an actionable recall app</p>
+                </center>
+                
+                <center>
+                    <h5> About </h5>
+                </center>
+            </div>
+            <p>
+                    When creating the "Food Recall App" there were many important components that went into it's development. After initially
+                huddling together to come up with an app concept and it's usefulness, this was the perfect app concept. Working
+                as a team we've been able to successfully incorporate: A Barcode API, FDA API, Firebase, Materialize and
+                Mobile Responsiveness. Below states the importance of each component in relation to the functionality of
+                the app.
+
+                <br></br>
+                <p>Barcode API: This API has been incorporated into the app to allow users of the app to have a broader search
+                    variety when searching for product recalls. While the app includes the option of searching by company,
+                    and product name including this API allows users to narrow their search to that specific item. </p>
+                <br>
+                </br>
+
+                <p>FDA API: This API is an integral part of our web app. It's what binds everything together. We use the FDA
+                    API to access FDA stored information about products that have been recalled. For example information
+                    pertaining to: the date a product was recalled, why it was recalled, the name and discription of the
+                    product etc... Our app waits for the user's search parameters, then uses the API to find results within
+                    those parameters, and then displays the results from back to the user.</p>
+                <br>
+                </br>
+
+                <p>Firebase: Provides a live database and backend service for this application. The service provides developers
+                    an API that allows app data to be synchronized between different product users in real-time. Then being
+                    stored onto firebase's cloud taking the user search results and storing them in their live database.
+                    To be displayed on the page in the recent search section of the page.</p>
+                <br>
+                </br>
+
+                <p>Materialize: We decided to include this framework because it's a component library created with CSS, JavaScript,
+                    and HTML. Materialize components help with constructing functional web pages and web apps</p>
+                <br>
+                </br>
+
+                <p>Mobile Responsiveness: Allows users the convenience of being able to use the application on a cellphone or
+                    tablet and not just on their computer. </p>
+            </p>
+        </div>
+    </div>
+    <div class="footer">
+        <h6>&copy 2018 Copyright Should I Eat This App</h6>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+</body>
+
 </html>
