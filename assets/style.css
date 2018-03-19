@@ -41,7 +41,7 @@ thead {
 	color: white;
 }
 th {
-	text-align: center;
+	text-align: left;
 }
 td {
 	text-align: left;
@@ -80,6 +80,9 @@ td {
 	color: red;
 	display: none;
 	margin-bottom: 5px;
+}
+.about-section{
+	margin-bottom: 25px; 
 }
 p {
 	text-align: center;
